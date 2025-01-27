@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Dispute Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            background: #20003e;
+            color: #ff007f;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 3px solid #ff007f;
+            background: #3e005d;
+            border-radius: 10px;
+        }
+        button {
+            font-family: 'Inter', sans-serif;
+            background: #ff007f;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #d1006f;
+        }
+        .hidden { display: none; }
+        .answer { color: #00ff00; font-weight: bold; margin-top: 5px; }
+        .question-answer { margin-bottom: 30px; padding: 10px; border-bottom: 1px solid #ff007f; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container" id="quiz">
+        <h1>Billing Dispute Quiz</h1>
+        <p id="question"></p>
+        <div id="options"></div>
+        <button onclick="nextQuestion()">Next</button>
+        <p id="feedback"></p>
+    </div>
+    <div class="quiz-container hidden" id="results">
+        <h1>Quiz Complete!</h1>
+        <p id="score"></p>
+        <div id="correct-answers"></div>
+        <button onclick="restartQuiz()">Redo Quiz</button>
+        <button onclick="goHome()">Go to Homepage</button>
+    </div>
+    
+    <script>
+        const questions = [
+            { q: "What is the first step after completing a DMEX?", a: ["Ensure the Final/Initial D0010(s) are received.", "Bill immediately without verification.", "Ignore the DMEX and proceed as usual."], correct: 0 },
+            { q: "How does Kraken handle billing after a DMEX?", a: ["It should automatically factor in the Final/Initial D0010s.", "It ignores DMEX-related billing changes.", "It requires manual intervention for every case."], correct: 0 },
+            { q: "What should be done if there are billing issues after a DMEX?", a: ["Manually bill to the DMEX readings.", "Ignore the issue and proceed with billing.", "Revert to pre-DMEX billing settings."], correct: 0 },
+            { q: "How should manual billing be handled after a DMEX?", a: ["Bill from the CoS reading up to the latest available reading.", "Charge the customer based on estimated values.", "Only bill if the customer disputes their charges."], correct: 0 },
+            { q: "What is an important consideration if a DMEX was requested for 12 months prior?", a: ["Some charges may be subject to back-billing rules.", "All previous charges must be voided.", "The customer should not be billed for this period."], correct: 0 },
+            { q: "Why is it necessary to validate meter readings post-DMEX?", a: ["To prevent billing discrepancies and ensure correct usage calculations.", "Validation is not necessary.", "To provide estimated consumption values."], correct: 0 },
+            { q: "How should incorrect readings be handled after a DMEX?", a: ["Use the correct readings from the DMEX process.", "Re-estimate the readings manually.", "Keep the incorrect readings if they seem close enough."], correct: 0 },
+            { q: "What should be communicated to the customer after a DMEX?", a: ["That their statement has been updated based on corrected readings.", "No need to inform the customer.", "Tell them they will need to verify their own readings."], correct: 0 },
+            { q: "What should be done if Kraken does not reflect the DMEX correctly?", a: ["Manually review and adjust the billing.", "Ignore it and hope it corrects itself.", "Delete the customer's previous records."], correct: 0 },
+            { q: "Why is DMEX important in billing corrections?", a: ["It ensures accurate historical meter readings and prevents billing gaps.", "It has no real impact on billing accuracy.", "It is only used for internal reporting."], correct: 0 }
+        ];
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionElement = document.getElementById("question");
+            const optionsElement = document.getElementById("options");
+            const feedbackElement = document.getElementById("feedback");
+            
+            questionElement.textContent = questions[currentQuestionIndex].q;
+            optionsElement.innerHTML = "";
+            feedbackElement.textContent = "";
+
+            questions[currentQuestionIndex].a.forEach((answer, index) => {
+                let button = document.createElement("button");
+                button.textContent = answer;
+                button.onclick = function() { checkAnswer(index); };
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            const feedbackElement = document.getElementById("feedback");
+            if (selectedIndex === questions[currentQuestionIndex].correct) {
+                feedbackElement.textContent = "Correct!";
+                feedbackElement.style.color = "#00ff00";
+                score++;
+            } else {
+                feedbackElement.textContent = "Incorrect!";
+                feedbackElement.style.color = "#ff0000";
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById("quiz").classList.add("hidden");
+            document.getElementById("results").classList.remove("hidden");
+            document.getElementById("score").textContent = `You scored ${score} out of ${questions.length}`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById("results").classList.add("hidden");
+            document.getElementById("quiz").classList.remove("hidden");
+            loadQuestion();
+        }
+
+        function goHome() {
+            window.location.href = "/";
+        }
+        
+        loadQuestion();
+    </script>
+</body>
+</html>
