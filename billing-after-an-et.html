@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing After an ET Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            background: #20003e;
+            color: #ff007f;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 3px solid #ff007f;
+            background: #3e005d;
+            border-radius: 10px;
+        }
+        button {
+            font-family: 'Inter', sans-serif;
+            background: #ff007f;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #d1006f;
+        }
+        .hidden { display: none; }
+        .answer { color: #00ff00; font-weight: bold; margin-top: 5px; }
+        .question-answer { margin-bottom: 30px; padding: 10px; border-bottom: 1px solid #ff007f; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container" id="quiz">
+        <h1>Billing After an ET Quiz</h1>
+        <p id="question"></p>
+        <div id="options"></div>
+        <button onclick="nextQuestion()">Next</button>
+        <p id="feedback"></p>
+    </div>
+    <div class="quiz-container hidden" id="results">
+        <h1>Quiz Complete!</h1>
+        <p id="score"></p>
+        <div id="correct-answers"></div>
+        <button onclick="restartQuiz()">Redo Quiz</button>
+        <button onclick="goHome()">Go to Homepage</button>
+    </div>
+    
+    <script>
+        const questions = [
+            { q: "What is an Erroneous Transfer (ET)?", a: ["When a supplier takes over a customer's energy supply by mistake.", "When a customer switches suppliers voluntarily.", "When an energy account is closed without notice."], correct: 0 },
+            { q: "What must be done before billing after an ET?", a: ["Ensure the ET is complete and the new Change of Supply (COS) read is received.", "Charge the customer immediately.", "Ignore the ET and continue with normal billing."], correct: 0 },
+            { q: "What happens in an ET Gain situation?", a: ["The supplier that gained the supply in error must unbill all charges for that meter point.", "The customer must pay for both suppliers during the ET period.", "No action is required as the customer will sort it out."], correct: 0 },
+            { q: "Who cannot charge for an ET Loss period?", a: ["The incorrect supplier that took the supply by mistake.", "The original supplier that lost the supply.", "The customer must pay both suppliers."], correct: 0 },
+            { q: "What is the correct process for raising an ET?", a: ["Ensure Kraken is updated with the correct information and follow the industry process.", "Contact the customer and tell them to fix it themselves.", "Manually override the billing system without supplier approval."], correct: 0 },
+            { q: "What is the compensation amount if an ET is not resolved within 20 working days?", a: ["£40 must be issued to the affected customer.", "No compensation is necessary.", "The supplier can decide the amount."], correct: 0 },
+            { q: "How soon must an ET Gain be processed?", a: ["Within 8 days as per industry regulations.", "There is no set timeline.", "Within 30 days based on supplier discretion."], correct: 0 },
+            { q: "What should be done with incorrect Change of Supply (COS) charges?", a: ["Rewind and re-bill with the correct supplier readings.", "Ignore the incorrect charges until flagged by the customer.", "Add the incorrect charges to the next billing cycle."], correct: 0 },
+            { q: "How does Kraken help in ET situations?", a: ["It displays the ET in the meter point timeline and helps automate billing corrections.", "It sends automatic refunds to customers.", "It allows suppliers to charge customers double."], correct: 0 },
+            { q: "What should be communicated to the customer during an ET process?", a: ["Their supply will not be interrupted and they will not be double billed.", "They should expect additional charges.", "They need to manually contact both suppliers to resolve the issue."], correct: 0 }
+        ];
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionElement = document.getElementById("question");
+            const optionsElement = document.getElementById("options");
+            const feedbackElement = document.getElementById("feedback");
+            
+            questionElement.textContent = questions[currentQuestionIndex].q;
+            optionsElement.innerHTML = "";
+            feedbackElement.textContent = "";
+
+            questions[currentQuestionIndex].a.forEach((answer, index) => {
+                let button = document.createElement("button");
+                button.textContent = answer;
+                button.onclick = function() { checkAnswer(index); };
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            const feedbackElement = document.getElementById("feedback");
+            if (selectedIndex === questions[currentQuestionIndex].correct) {
+                feedbackElement.textContent = "Correct!";
+                feedbackElement.style.color = "#00ff00";
+                score++;
+            } else {
+                feedbackElement.textContent = "Incorrect!";
+                feedbackElement.style.color = "#ff0000";
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById("quiz").classList.add("hidden");
+            document.getElementById("results").classList.remove("hidden");
+            document.getElementById("score").textContent = `You scored ${score} out of ${questions.length}`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById("results").classList.add("hidden");
+            document.getElementById("quiz").classList.remove("hidden");
+            loadQuestion();
+        }
+
+        function goHome() {
+            window.location.href = "/";
+        }
+        
+        loadQuestion();
+    </script>
+</body>
+</html>
