@@ -49,7 +49,7 @@
         <h1>Raman Billing Masters Quiz</h1>
         <p>Select a category to begin:</p>
         <a href="billing-after-an-et.html">Billing After An ET</a>
-        <a href="billing-after-dispute.html">Billing After a Dispute</a>
+        <a href="billing-after-a-dispute.html">Billing After a Dispute</a>
         <a href="billing-after-dmex.html">Billing After DMEX</a>
         
         <div class="info">
@@ -66,6 +66,20 @@
                 <li><strong>Billing After a Dispute</strong></li>
                 <li><strong>Billing After DMEX</strong></li>
             </ul>
+            
+            <h2>Data Source</h2>
+            <p>The quiz pulls questions from a Knowledge Owl and uses an OpenAI API to rephrase them every seven days.</p>
+            <p>Billing KO: <a href="https://octopusenergy.knowledgeowl.com/help/billing">[Knowledge Owl]</a></p>
+            <p>API link: <span id="hidden-api">[Hidden]</span></p>
+
+<script>
+  const apiKey = "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; // Replace with your actual key
+  document.getElementById("hidden-api").addEventListener("click", function () {
+    alert("You don't need to see this! 😉");
+  });
+</script>
+
+
             
             <h2>The Bottom Line</h2>
             <p>By using AI-powered quizzes with regularly refreshed questions, Octopus Energy makes sure team members keep building their knowledge in a way that actually sticks. This approach not only improves memory and problem-solving skills but also ensures employees are always ready to handle tricky billing situations with confidence and accuracy.</p>
